@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -33,6 +35,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
+
+    /**
+     * @var Collection<int, Product>
+     */
+    #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'createdBy')]
+    private Collection $products;
+
+    /**
+     * @var Collection<int, DailyLog>
+     */
+    #[ORM\OneToMany(targetEntity: DailyLog::class, mappedBy: 'owner')]
+    private Collection $dailyLogs;
+
+    public function __construct()
+    {
+        $this->products = new ArrayCollection();
+        $this->dailyLogs = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -113,5 +133,65 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials(): void
     {
         // @deprecated, to be removed when upgrading to Symfony 8
+    }
+
+    /**
+     * @return Collection<int, Product>
+     */
+    public function getProducts(): Collection
+    {
+        return $this->products;
+    }
+
+    public function addProduct(Product $product): static
+    {
+        if (!$this->products->contains($product)) {
+            $this->products->add($product);
+            $product->setCreatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProduct(Product $product): static
+    {
+        if ($this->products->removeElement($product)) {
+            // set the owning side to null (unless already changed)
+            if ($product->getCreatedBy() === $this) {
+                $product->setCreatedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DailyLog>
+     */
+    public function getDailyLogs(): Collection
+    {
+        return $this->dailyLogs;
+    }
+
+    public function addDailyLog(DailyLog $dailyLog): static
+    {
+        if (!$this->dailyLogs->contains($dailyLog)) {
+            $this->dailyLogs->add($dailyLog);
+            $dailyLog->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDailyLog(DailyLog $dailyLog): static
+    {
+        if ($this->dailyLogs->removeElement($dailyLog)) {
+            // set the owning side to null (unless already changed)
+            if ($dailyLog->getOwner() === $this) {
+                $dailyLog->setOwner(null);
+            }
+        }
+
+        return $this;
     }
 }
