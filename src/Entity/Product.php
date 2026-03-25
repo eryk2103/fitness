@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Enum\UnitType;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ORM\Table(name: 'products')]
@@ -16,6 +17,13 @@ class Product
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Name cannot be empty.")]
+    #[Assert\Length(
+        min: 3,
+        max: 100,
+        minMessage: "Name must be at least {{ limit }} characters long",
+        maxMessage: "Name cannot be longer than {{ limit }} characters"
+    )]
     private ?string $name = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -25,21 +33,31 @@ class Product
     private ?string $barcode = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank]
+    #[Assert\Positive(message: "Size must be positive.")]
     private ?float $size = null;
 
     #[ORM\Column(nullable: true)]
     private ?float $servingSize = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank]
+    #[Assert\PositiveOrZero(message: "Caloreis must be zero or positive.")]
     private ?int $calories = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank]
+    #[Assert\PositiveOrZero(message: "Protein must be zero or positive.")]
     private ?float $protein = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank]
+    #[Assert\PositiveOrZero(message: "Carbs must be zero or positive.")]
     private ?float $carbs = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank]
+    #[Assert\PositiveOrZero(message: "Fats must be zero or positive.")]
     private ?float $fats = null;
 
     #[ORM\Column(nullable: true)]
@@ -52,6 +70,7 @@ class Product
     private ?User $createdBy = null;
 
     #[ORM\Column(enumType: UnitType::class)]
+    #[Assert\NotBlank]
     private ?UnitType $unit = null;
 
     #[ORM\Column(options: ['default' => false])]

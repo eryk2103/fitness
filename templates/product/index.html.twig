@@ -1,18 +1,22 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<h1>Products page</h1>
-<a href="{{ url('app_product_new')}}">New product</a>
-<ul>
+<div class="d-flex align-items-center mb-3 gap-3">
+    <h1 class="m-0">Products</h1>
+    <a class="btn btn-primary" href="{{ url('app_product_new')}}">New product</a>
+</div>
+<ul class="list-group">
     {% for product in products %}
-        <li>
-            <div>
+        <li class="list-group-item d-flex">
+            <div class="flex-grow-1 d-flex align-items-center">
                 {{ product.name }}
             </div>
-            <form method="post" action="{{ path('app_product_delete', {'id': product.id}) }}" onsubmit="return confirm('Are you sure?');">
-                <input type="hidden" name="_token" value="{{ csrf_token('delete-product' ~ product.id) }}">
-                <button class="btn btn-danger">Delete</button>
-            </form>
+            <div class="">
+                <form method="post" action="{{ path('app_product_delete', {'id': product.id}) }}" onsubmit="return confirm('Are you sure?');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete-product' ~ product.id) }}">
+                    <button class="btn btn-danger">Delete</button>
+                </form>
+            </div>
         </li>
     {% endfor %}
 </ul>
