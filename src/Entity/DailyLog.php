@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DailyLogRepository::class)]
 #[ORM\Table(
-    table: 'daily_logs',
+    name: 'daily_logs',
     uniqueConstraints: [
         new ORM\UniqueConstraint(name: 'user_date_unique', columns: ['owner_id', 'date'])
     ]
