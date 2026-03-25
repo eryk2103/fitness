@@ -9,6 +9,12 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DailyLogRepository::class)]
+#[ORM\Table(
+    table: 'daily_logs',
+    uniqueConstraints: [
+        new ORM\UniqueConstraint(name: 'user_date_unique', columns: ['owner_id', 'date'])
+    ]
+)]
 class DailyLog
 {
     #[ORM\Id]
