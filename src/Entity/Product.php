@@ -21,8 +21,8 @@ class Product
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $brand = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $barcode = null;
+    #[ORM\Column(length: 13, nullable: true)]
+    private ?string $barcode = null;
 
     #[ORM\Column]
     private ?float $size = null;
@@ -54,6 +54,9 @@ class Product
     #[ORM\Column(enumType: UnitType::class)]
     private ?UnitType $unit = null;
 
+    #[ORM\Column(options: ['default' => false])]
+    private ?bool $archived = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -83,12 +86,12 @@ class Product
         return $this;
     }
 
-    public function getBarcode(): ?int
+    public function getBarcode(): ?string
     {
         return $this->barcode;
     }
 
-    public function setBarcode(?int $barcode): static
+    public function setBarcode(?string $barcode): static
     {
         $this->barcode = $barcode;
 
@@ -211,6 +214,18 @@ class Product
     public function setUnit(UnitType $unit): static
     {
         $this->unit = $unit;
+
+        return $this;
+    }
+
+    public function isArchived(): ?bool
+    {
+        return $this->archived;
+    }
+
+    public function setArchived(bool $archived): static
+    {
+        $this->archived = $archived;
 
         return $this;
     }
