@@ -24,6 +24,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url('app_product_index')}}">Products</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('app_dailylog_index')}}">Tracker</a>
+                        </li>
                         {% if app.user %}
                         <li class="nav-item w-100 d-flex flex-lg-row-reverse justify-content-lg-start gap-3 align-items-center py-2  p-lg-0">
                             <a href="{{ logout_path() }}" class="btn btn-sm btn-secondary">Logout</a>

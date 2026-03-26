@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="row">
+    <div class="col-3"></div>
+    <div class="col-6">
+        <h1 class="mb-3">New log entry</h1>
+        {{ form(form, {'attr': {'novalidate': true}}) }}
+    </div>
+    <div class="col-3"></div>
+</div>
+
+{% endblock %}

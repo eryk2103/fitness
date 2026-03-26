@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+{% set yesterday = (dailyLog.date|date("Y-m-d"))|date_modify("-1 day")|date("Y-m-d") %}
+{% set tomorrow = (dailyLog.date|date("Y-m-d"))|date_modify("1 day")|date("Y-m-d") %}
+
+<div class="d-flex justify-content-between align-items-center">
+    <a href="{{ url('app_dailylog_index', {'date': yesterday }) }}" class="btn btn-secondary">back</a>
+    <h2 class="m-0">{{ dailyLog.date|date('F j, Y') }}</h2>
+    <a href="{{ url('app_dailylog_index', {'date': tomorrow }) }}" class="btn btn-secondary">next</a>
+</div>
+<a href="{{ url('app_dailylog_newentry', { date: dailyLog.date|date("Y-m-d")}) }}" class="btn btn-primary">Add product</a>
+<h4>{{calories}} kcal</h4>
+<ul class="list-group">
+    {% for entry in dailyLog.productEntries %}
+    <li class="list-group-item">
+        {{ entry.product.name }}
+        {{ entry.calories }} kcal
+    </li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ProductEntryRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProductEntryRepository::class)]
 #[ORM\Table(name: 'product_entries')]
@@ -15,12 +16,15 @@ class ProductEntry
     private ?int $id = null;
 
     #[ORM\ManyToOne]
+    #[Assert\NotBlank]
     private ?Product $product = null;
 
     #[ORM\ManyToOne(inversedBy: 'productEntries')]
     private ?DailyLog $dailyLog = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank]
+    #[Assert\Positive(message: "Quantity must be positive.")]
     private ?float $quantity = null;
 
     public function getId(): ?int
@@ -62,5 +66,13 @@ class ProductEntry
         $this->quantity = $quantity;
 
         return $this;
+    }
+
+    public function getCalories(): ?int 
+    {
+        $calories = $this->getProduct()->getCalories();
+        $quantity = $this->getQuantity();
+            
+        return $calories * $quantity / 100;
     }
 }
